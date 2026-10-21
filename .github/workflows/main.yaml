@@ -10,20 +10,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Starting pipeline
         run: echo "Pipeline started at $(date)"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Typecheck
+      - name: Lint
         run: npm run lint:check
 
       - name: Formatting Lint

@@ -1,0 +1,6 @@
+[
+  { "name": "Mon boîtier", "kind": "APPAREIL", "url": "#" },
+  { "name": "Objectif 35 mm", "kind": "OPTIQUE", "url": "#" },
+  { "name": "Sac à dos", "kind": "SAC", "url": "#" },
+  { "name": "Mes presets", "kind": "RETOUCHE", "url": "#" }
+]

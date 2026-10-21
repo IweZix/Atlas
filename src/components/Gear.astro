@@ -1,0 +1,80 @@
+---
+interface Props {
+  items: { name: string; kind: string; url: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="gear">
+  <h2 class="label mono">MATÉRIEL</h2>
+  <ul>
+    {
+      items.map((g) => (
+        <li>
+          <a href={g.url} rel="sponsored noopener" target="_blank">
+            <span class="kind mono">{g.kind}</span>
+            <span class="gear-name">{g.name} ↗</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="note">Liens affiliés — merci de soutenir le carnet.</p>
+</section>
+
+<style>
+  .gear {
+    padding: 44px var(--gutter) 48px;
+  }
+
+  .label {
+    margin: 0;
+    padding-bottom: 12px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    height: 100%;
+    padding: 14px;
+    border-radius: var(--radius-card);
+    background: var(--card);
+  }
+
+  .kind {
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .gear-name {
+    font-size: 14px;
+  }
+
+  .note {
+    margin: 0;
+    padding-top: 22px;
+    font-size: 11px;
+    color: var(--text-ghost);
+  }
+
+  @media (min-width: 900px) {
+    .gear {
+      padding-bottom: 40px;
+    }
+  }
+</style>

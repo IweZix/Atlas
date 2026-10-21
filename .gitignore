@@ -136,3 +136,6 @@ dist
 .pnp.*
 .vercel
 .env*
+
+# Astro
+.astro/

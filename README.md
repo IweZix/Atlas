@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Carnet de voyage — @luca_ncl
 
-## Getting Started
+Site perso de photos de voyage : un globe 3D à faire tourner, chaque point est un voyage (album, légende, année), et en bas le matériel photo en liens affiliés. Astro statique, déployé sur Vercel.
 
-First, run the development server:
+## Lancer
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # vérifie les types puis génère dist/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Node >= 22.12 requis.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Ajouter un voyage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Créer `src/content/trips/<slug>.md` :
 
-## Learn More
+   ```yaml
+   ---
+   name: Prague
+   code: PRG        # libellé court sur le globe mobile
+   year: 2026
+   order: 3         # ordre chronologique (tracé pointillé + liste)
+   lat: 50.08
+   lon: 14.43
+   caption: "Brouillard sur la Vltava, ponts à six heures du matin, personne d'autre."
+   cover: ./prague/01.jpg
+   photos: [./prague/01.jpg, ./prague/02.jpg, ./prague/03.jpg, ./prague/04.jpg]
+   ---
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Déposer les photos dans `src/content/trips/<slug>/` (4 à 8, JPEG, 2000px de large max).
+3. Un lien direct vers un voyage : `/?v=<slug>`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Les photos actuelles sont des placeholders (`npm run generate-placeholders`). Les liens du matériel sont dans `src/data/gear.json`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Déployer
 
-## Deploy on Vercel
+Importer le dépôt dans Vercel (preset Astro détecté, aucune variable d'environnement), puis rattacher le domaine.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Référence : `docs/design-handoff.md` et `docs/maquette/` (écrans 2a mobile, 3a desktop).

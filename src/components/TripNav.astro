@@ -1,0 +1,98 @@
+---
+interface Props {
+  trips: { slug: string; name: string; year: number }[];
+  active: string;
+}
+
+const { trips, active } = Astro.props;
+---
+
+<nav class="nav" aria-label="Voyages">
+  {
+    trips.map((t, i) => (
+      <button
+        type="button"
+        class="trip-btn"
+        data-slug={t.slug}
+        aria-pressed={t.slug === active ? 'true' : 'false'}
+      >
+        <span class="num mono">{String(trips.length - i).padStart(2, '0')}</span>
+        <span class="name">{t.name}</span>
+        <span class="year mono">{t.year}</span>
+      </button>
+    ))
+  }
+</nav>
+
+<style>
+  .nav {
+    display: flex;
+    gap: 6px;
+    padding: 0 var(--gutter);
+    overflow-x: auto;
+  }
+
+  .trip-btn {
+    flex: none;
+    padding: 8px 14px;
+    border: 1px solid var(--chip-border);
+    border-radius: var(--radius-pill);
+    color: var(--text-chip);
+    font-size: 13px;
+  }
+
+  .trip-btn[aria-pressed='true'] {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+  }
+
+  .num,
+  .year {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .nav {
+      flex-direction: column;
+      gap: 0;
+      padding-top: 28px;
+      overflow: visible;
+    }
+
+    .trip-btn {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      align-items: baseline;
+      padding: 12px 0;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
+      text-align: left;
+      font-size: 18px;
+      color: var(--text-muted);
+    }
+
+    .trip-btn[aria-pressed='true'] {
+      background: none;
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .trip-btn:hover {
+      color: var(--text);
+    }
+
+    .num,
+    .year {
+      display: inline;
+      font-size: 11px;
+      color: var(--text-ghost);
+    }
+
+    .trip-btn[aria-pressed='true'] .num,
+    .trip-btn[aria-pressed='true'] .year {
+      color: var(--text);
+    }
+  }
+</style>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#e6e5e2;font-family:'Geist',sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}a:hover{opacity:.7}*::-webkit-scrollbar{display:none}</style>
+</helmet>
+<section style="padding:56px 56px 0;display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6b6a66">Tour 3 — version web</div>
+    <div style="font-size:28px;font-weight:500;color:#111">Globe à gauche, voyage à droite</div>
+  </div>
+  <div id="3a" style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;background:#111;color:#fff;padding:3px 8px;border-radius:4px">3a</div>
+      <div style="font-size:15px;color:#333">Bureau — version ordinateur de <a href="#2a" style="text-decoration:underline">2a</a></div>
+    </div>
+    <div style="width:1280px;height:820px;border-radius:12px;overflow:hidden;background:#000;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);border:1px solid #2a2a28;display:flex;flex-direction:column">
+      <div style="height:38px;flex:none;background:#151514;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid #222220">
+        <div style="width:11px;height:11px;border-radius:50%;background:#3a3a37"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#3a3a37"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#3a3a37"></div>
+        <div style="margin-left:18px;flex:1;max-width:420px;height:24px;border-radius:6px;background:#0c0c0b;display:flex;align-items:center;padding:0 12px;font-family:'Geist Mono',monospace;font-size:11px;color:#77766f">luca-ncl.com</div>
+      </div>
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 460px;color:#fff">
+        <div style="position:relative;min-height:0">
+          <canvas ref="{{ globeRefW }}" style="position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab"></canvas>
+          <div style="position:absolute;top:36px;left:40px;display:flex;flex-direction:column;gap:6px;pointer-events:none">
+            <div style="font-size:20px;font-weight:500;letter-spacing:-.01em">luca_ncl</div>
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;color:#77766f">CARNET DE ROUTE · 2025 — 2026</div>
+          </div>
+          <div style="position:absolute;left:40px;right:40px;bottom:28px;display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;color:#6c6b67;pointer-events:none">
+            <span>{{ curE.coords }}</span><span>Glisse pour faire tourner · clique un point</span>
+          </div>
+        </div>
+        <div style="border-left:1px solid #1c1c1b;overflow-y:auto;min-height:0">
+          <div style="padding:36px 36px 0;display:flex;justify-content:flex-end">
+            <a href="https://instagram.com/luca_ncl" style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;color:#bdbcb7">INSTAGRAM ↗</a>
+          </div>
+          <div style="padding:28px 36px 0;display:flex;flex-direction:column">
+            <sc-for list="{{ tripsE }}" as="t" hint-placeholder-count="5">
+              <div onClick="{{ t.select }}" style="display:grid;grid-template-columns:40px 1fr auto;align-items:baseline;padding:12px 0;border-top:1px solid #1c1c1b;cursor:pointer">
+                <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#fff">{{ t.num }}</div>
+                  <div style="font-size:18px;color:#fff">{{ t.name }}</div>
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#fff">{{ t.year }}</div>
+                </sc-if>
+                <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#5e5d59">{{ t.num }}</div>
+                  <div style="font-size:18px;color:#8f8e89" style-hover="color:#fff">{{ t.name }}</div>
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#5e5d59">{{ t.year }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:40px 36px 0;display:flex;justify-content:space-between;align-items:baseline">
+            <div style="font-size:52px;font-weight:500;letter-spacing:-.035em;line-height:1">{{ curE.name }}</div>
+            <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#8f8e89">{{ curE.year }}</div>
+          </div>
+          <div style="padding:12px 36px 22px;font-size:15px;line-height:1.5;color:#a9a8a3;text-wrap:pretty">{{ curE.caption }}</div>
+          <div style="padding:0 36px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <sc-for list="{{ stripE }}" as="s" hint-placeholder-count="4">
+              <div style="aspect-ratio:4/5;border-radius:4px;background:repeating-linear-gradient(135deg,#161615 0 8px,#1d1d1c 8px 16px);display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;font-family:'Geist Mono',monospace;font-size:10px;color:#6c6b67">{{ s }}</div>
+            </sc-for>
+          </div>
+          <div style="padding:44px 36px 0">
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8f8e89;padding-bottom:12px">MATÉRIEL</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <sc-for list="{{ gear }}" as="g" hint-placeholder-count="4">
+                <a href="#" style="display:flex;flex-direction:column;gap:22px;padding:14px;border-radius:6px;background:#111110">
+                  <span style="font-family:'Geist Mono',monospace;font-size:10px;color:#77766f">{{ g.kind }}</span>
+                  <span style="font-size:14px">{{ g.name }} ↗</span>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:22px 36px 40px;font-size:11px;color:#5e5d59">Liens affiliés — merci de soutenir le carnet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="padding:56px 56px 0;display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6b6a66">Tour 2 — globe 3D</div>
+    <div style="font-size:28px;font-weight:500;color:#111">Glisse pour faire tourner, tape un point pour ouvrir le voyage</div>
+  </div>
+  <div id="2a" style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;background:#111;color:#fff;padding:3px 8px;border-radius:4px">2a</div>
+      <div style="font-size:15px;color:#333">Globe — sur la base de <a href="#1c" style="text-decoration:underline">1c</a></div>
+    </div>
+    <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#000;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);border:10px solid #1a1a19">
+      <div style="height:100%;overflow-y:auto;color:#fff">
+        <div style="position:relative;height:470px;background:#000">
+          <canvas ref="{{ globeRef }}" style="position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab"></canvas>
+          <div style="position:absolute;top:56px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:baseline;pointer-events:none">
+            <div style="font-size:17px;font-weight:500">luca_ncl</div>
+            <a href="https://instagram.com/luca_ncl" style="font-family:'Geist Mono',monospace;font-size:11px;color:#bdbcb7;pointer-events:auto">INSTAGRAM ↗</a>
+          </div>
+          <div style="position:absolute;left:22px;right:22px;bottom:16px;display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10px;color:#6c6b67;pointer-events:none">
+            <span>{{ curD.coords }}</span><span>← glisse →</span>
+          </div>
+        </div>
+        <div style="padding:0 22px;display:flex;gap:6px;overflow-x:auto">
+          <sc-for list="{{ tripsD }}" as="t" hint-placeholder-count="5">
+            <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ t.select }}" style="flex:none;padding:8px 14px;border-radius:999px;background:#fff;color:#000;font-size:13px;cursor:pointer">{{ t.name }}</div>
+            </sc-if>
+            <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ t.select }}" style="flex:none;padding:8px 14px;border-radius:999px;border:1px solid #333;color:#bdbcb7;font-size:13px;cursor:pointer">{{ t.name }}</div>
+            </sc-if>
+          </sc-for>
+        </div>
+        <div style="padding:28px 22px 0;display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:40px;font-weight:500;letter-spacing:-.03em">{{ curD.name }}</div>
+          <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#8f8e89">{{ curD.year }}</div>
+        </div>
+        <div style="padding:8px 22px 18px;font-size:14px;line-height:1.45;color:#a9a8a3;text-wrap:pretty">{{ curD.caption }}</div>
+        <div style="display:flex;gap:6px;overflow-x:auto;padding:0 22px;scroll-snap-type:x mandatory">
+          <sc-for list="{{ stripD }}" as="s" hint-placeholder-count="4">
+            <div style="flex:none;width:260px;aspect-ratio:4/5;scroll-snap-align:center;border-radius:4px;background:repeating-linear-gradient(135deg,#161615 0 8px,#1d1d1c 8px 16px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font-family:'Geist Mono',monospace;font-size:10px;color:#6c6b67">{{ s }}</div>
+          </sc-for>
+        </div>
+        <div style="padding:44px 22px 0">
+          <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8f8e89;padding-bottom:12px">MATÉRIEL</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <sc-for list="{{ gear }}" as="g" hint-placeholder-count="4">
+              <a href="#" style="display:flex;flex-direction:column;gap:22px;padding:14px;border-radius:6px;background:#111110">
+                <span style="font-family:'Geist Mono',monospace;font-size:10px;color:#77766f">{{ g.kind }}</span>
+                <span style="font-size:14px">{{ g.name }} ↗</span>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:22px 22px 48px;font-size:11px;color:#5e5d59">Liens affiliés — merci de soutenir le carnet.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="padding:56px;display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6b6a66">Tour 1 — lien en bio @luca_ncl</div>
+    <div style="font-size:28px;font-weight:500;color:#111">Trois directions, noir &amp; blanc, photos en vedette</div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <!-- 1a -->
+    <div id="1a" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'Geist Mono',monospace;font-size:12px;background:#111;color:#fff;padding:3px 8px;border-radius:4px">1a</div>
+        <div style="font-size:15px;color:#333">Nuit — albums plein cadre</div>
+      </div>
+      <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#0d0d0c;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);border:10px solid #1a1a19">
+        <div style="height:100%;overflow-y:auto;color:#f2f1ee">
+          <div style="padding:56px 22px 28px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8a8984">@LUCA_NCL</div>
+            <div style="font-size:44px;line-height:.95;font-weight:500;letter-spacing:-.03em">Carnet<br>de route</div>
+            <div style="font-size:14px;color:#a3a29d;line-height:1.45;text-wrap:pretty">Cinq voyages, 2025 — 2026. Ce que j'ai vu, à peu près dans l'ordre.</div>
+          </div>
+          <div style="margin:0 22px;position:relative;aspect-ratio:1.25;border:1px solid #2a2a28;border-radius:6px;overflow:hidden">
+            <sc-for list="{{ grid }}" as="g" hint-placeholder-count="0">
+              <div style="position:absolute;left:{{ g.x }};top:{{ g.y }};width:{{ g.w }};height:{{ g.h }};background:#1f1f1d"></div>
+            </sc-for>
+            <sc-for list="{{ tripsA }}" as="t" hint-placeholder-count="0">
+              <div onClick="{{ t.select }}" style="position:absolute;left:{{ t.x }};top:{{ t.y }};transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px">
+                <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.15)"></div>
+                </sc-if>
+                <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:7px;height:7px;border-radius:50%;background:#bdbcb7"></div>
+                </sc-if>
+                <div style="font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.05em;color:#d9d8d3">{{ t.code }}</div>
+              </div>
+            </sc-for>
+            <div style="position:absolute;left:10px;bottom:8px;font-family:'Geist Mono',monospace;font-size:9px;color:#5e5d59">28°N — 56°N · 12°O — 26°E</div>
+          </div>
+          <div style="padding:36px 22px 0;display:flex;flex-direction:column;gap:30px">
+            <sc-for list="{{ tripsA }}" as="t" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="position:relative;aspect-ratio:4/5;border-radius:4px;overflow:hidden;background:repeating-linear-gradient(135deg,#1c1c1a 0 8px,#222220 8px 16px)">
+                  <div style="position:absolute;top:12px;left:12px;font-family:'Geist Mono',monospace;font-size:10px;color:#6f6e6a">photo — {{ t.name }}</div>
+                  <div style="position:absolute;left:0;right:0;bottom:0;padding:40px 16px 16px;background:linear-gradient(transparent,rgba(0,0,0,.75));display:flex;justify-content:space-between;align-items:flex-end">
+                    <div style="font-size:30px;font-weight:500;letter-spacing:-.02em">{{ t.name }}</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#c9c8c3">{{ t.num }} / {{ t.year }}</div>
+                  </div>
+                </div>
+                <div style="font-size:14px;color:#a3a29d;line-height:1.45;text-wrap:pretty">{{ t.caption }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:48px 22px 0;display:flex;flex-direction:column">
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8a8984;padding-bottom:12px">DANS MON SAC</div>
+            <sc-for list="{{ gear }}" as="g" hint-placeholder-count="4">
+              <a href="#" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-top:1px solid #262624;font-size:15px">
+                <span>{{ g.name }}</span><span style="font-family:'Geist Mono',monospace;font-size:11px;color:#8a8984">{{ g.kind }} ↗</span>
+              </a>
+            </sc-for>
+            <div style="font-size:11px;color:#5e5d59;padding-top:8px">Liens affiliés — ça ne te coûte rien de plus.</div>
+          </div>
+          <div style="padding:40px 22px 48px">
+            <a href="https://instagram.com/luca_ncl" style="display:flex;justify-content:center;align-items:center;height:54px;border-radius:999px;background:#f2f1ee;color:#0d0d0c;font-size:15px;font-weight:500">Suivre @luca_ncl sur Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1b -->
+    <div id="1b" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'Geist Mono',monospace;font-size:12px;background:#111;color:#fff;padding:3px 8px;border-radius:4px">1b</div>
+        <div style="font-size:15px;color:#333">Blanc — index qui se déplie</div>
+      </div>
+      <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#f7f7f5;box-shadow:0 30px 60px -20px rgba(0,0,0,.25);border:10px solid #1a1a19">
+        <div style="height:100%;overflow-y:auto;color:#111">
+          <div style="padding:58px 22px 22px;display:flex;justify-content:space-between;align-items:baseline">
+            <div style="font-size:17px;font-weight:500;letter-spacing:-.01em">luca_ncl</div>
+            <a href="https://instagram.com/luca_ncl" style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em">INSTAGRAM ↗</a>
+          </div>
+          <div style="margin:0 22px;position:relative;aspect-ratio:1.6;border-top:1px solid #111;border-bottom:1px solid #111">
+            <sc-for list="{{ grid }}" as="g" hint-placeholder-count="0">
+              <div style="position:absolute;left:{{ g.x }};top:{{ g.y }};width:{{ g.w }};height:{{ g.h }};background:#e2e1dd"></div>
+            </sc-for>
+            <sc-for list="{{ tripsB }}" as="t" hint-placeholder-count="0">
+              <div onClick="{{ t.select }}" style="position:absolute;left:{{ t.x }};top:{{ t.y }};transform:translate(-50%,-50%);cursor:pointer;padding:6px;display:flex;align-items:center;gap:5px">
+                <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#111;color:#fff;font-family:'Geist Mono',monospace;font-size:9px;display:flex;align-items:center;justify-content:center">{{ t.num }}</div>
+                </sc-if>
+                <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:20px;height:20px;border-radius:50%;border:1px solid #111;background:#f7f7f5;font-family:'Geist Mono',monospace;font-size:9px;display:flex;align-items:center;justify-content:center">{{ t.num }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:36px 22px 8px">
+            <div style="font-size:34px;line-height:1.02;font-weight:400;letter-spacing:-.03em;text-wrap:pretty">Notes et photos de route, 2025 — 2026.</div>
+          </div>
+          <div style="padding:20px 22px 0;display:flex;flex-direction:column">
+            <sc-for list="{{ tripsB }}" as="t" hint-placeholder-count="5">
+              <div style="border-top:1px solid #111">
+                <div onClick="{{ t.select }}" style="display:grid;grid-template-columns:34px 1fr auto;align-items:baseline;padding:16px 0;cursor:pointer">
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#77766f">{{ t.num }}</div>
+                  <div style="font-size:22px;letter-spacing:-.02em">{{ t.name }}</div>
+                  <div style="font-family:'Geist Mono',monospace;font-size:11px;color:#77766f">{{ t.year }}</div>
+                </div>
+                <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:12px;padding-bottom:22px">
+                    <div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:4px;aspect-ratio:1.2">
+                      <div style="grid-row:span 2;background:repeating-linear-gradient(135deg,#e4e3df 0 8px,#ecebe7 8px 16px);display:flex;align-items:flex-end;padding:8px;font-family:'Geist Mono',monospace;font-size:10px;color:#8d8c86">photo 1</div>
+                      <div style="background:repeating-linear-gradient(135deg,#e4e3df 0 8px,#ecebe7 8px 16px);display:flex;align-items:flex-end;padding:8px;font-family:'Geist Mono',monospace;font-size:10px;color:#8d8c86">2</div>
+                      <div style="background:repeating-linear-gradient(135deg,#e4e3df 0 8px,#ecebe7 8px 16px);display:flex;align-items:flex-end;padding:8px;font-family:'Geist Mono',monospace;font-size:10px;color:#8d8c86">3</div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:34px 1fr;font-size:14px;line-height:1.45;color:#3a3935">
+                      <div></div><div style="text-wrap:pretty">{{ t.caption }}</div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin:48px 22px 0;padding-top:14px;border-top:1px solid #111;display:flex;flex-direction:column;gap:4px">
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;color:#77766f;padding-bottom:10px">MATÉRIEL</div>
+            <sc-for list="{{ gear }}" as="g" hint-placeholder-count="4">
+              <a href="#" style="display:flex;justify-content:space-between;padding:8px 0;font-size:15px"><span>{{ g.name }}</span><span style="color:#77766f">↗</span></a>
+            </sc-for>
+          </div>
+          <div style="padding:48px 22px 44px;font-family:'Geist Mono',monospace;font-size:10px;color:#8d8c86;display:flex;justify-content:space-between">
+            <span>© Luca 2026</span><span>Liens affiliés</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1c -->
+    <div id="1c" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'Geist Mono',monospace;font-size:12px;background:#111;color:#fff;padding:3px 8px;border-radius:4px">1c</div>
+        <div style="font-size:15px;color:#333">Carte d'abord — on voyage en tapant les points</div>
+      </div>
+      <div style="width:390px;height:844px;border-radius:44px;overflow:hidden;background:#000;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);border:10px solid #1a1a19">
+        <div style="height:100%;overflow-y:auto;color:#fff">
+          <div style="position:relative;height:440px;background:#000">
+            <sc-for list="{{ grid }}" as="g" hint-placeholder-count="0">
+              <div style="position:absolute;left:{{ g.x }};top:{{ g.y }};width:{{ g.w }};height:{{ g.h }};background:#181817"></div>
+            </sc-for>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+              <polyline points="{{ routePts }}" fill="none" stroke="#5a5955" stroke-width=".4" stroke-dasharray="1 1.2" vector-effect="non-scaling-stroke"></polyline>
+            </svg>
+            <sc-for list="{{ tripsC }}" as="t" hint-placeholder-count="0">
+              <div onClick="{{ t.select }}" style="position:absolute;left:{{ t.x }};top:{{ t.y }};transform:translate(-50%,-50%);cursor:pointer;padding:8px">
+                <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 0 7px rgba(255,255,255,.14),0 0 0 15px rgba(255,255,255,.06)"></div>
+                </sc-if>
+                <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:8px;height:8px;border-radius:50%;background:#8f8e89"></div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <div style="position:absolute;top:56px;left:22px;right:22px;display:flex;justify-content:space-between;align-items:baseline">
+              <div style="font-size:17px;font-weight:500">luca_ncl</div>
+              <a href="https://instagram.com/luca_ncl" style="font-family:'Geist Mono',monospace;font-size:11px;color:#bdbcb7">INSTAGRAM ↗</a>
+            </div>
+            <div style="position:absolute;left:22px;bottom:18px;font-family:'Geist Mono',monospace;font-size:10px;color:#6c6b67">{{ cur.coords }}</div>
+          </div>
+          <div style="padding:0 22px;display:flex;gap:6px;overflow-x:auto">
+            <sc-for list="{{ tripsC }}" as="t" hint-placeholder-count="5">
+              <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ t.select }}" style="flex:none;padding:8px 14px;border-radius:999px;background:#fff;color:#000;font-size:13px;cursor:pointer">{{ t.name }}</div>
+              </sc-if>
+              <sc-if value="{{ t.inactive }}" hint-placeholder-val="{{ true }}">
+                <div onClick="{{ t.select }}" style="flex:none;padding:8px 14px;border-radius:999px;border:1px solid #333;color:#bdbcb7;font-size:13px;cursor:pointer">{{ t.name }}</div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="padding:28px 22px 0;display:flex;justify-content:space-between;align-items:baseline">
+            <div style="font-size:40px;font-weight:500;letter-spacing:-.03em">{{ cur.name }}</div>
+            <div style="font-family:'Geist Mono',monospace;font-size:12px;color:#8f8e89">{{ cur.year }}</div>
+          </div>
+          <div style="padding:8px 22px 18px;font-size:14px;line-height:1.45;color:#a9a8a3;text-wrap:pretty">{{ cur.caption }}</div>
+          <div style="display:flex;gap:6px;overflow-x:auto;padding:0 22px;scroll-snap-type:x mandatory">
+            <sc-for list="{{ strip }}" as="s" hint-placeholder-count="4">
+              <div style="flex:none;width:260px;aspect-ratio:4/5;scroll-snap-align:center;border-radius:4px;background:repeating-linear-gradient(135deg,#161615 0 8px,#1d1d1c 8px 16px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font-family:'Geist Mono',monospace;font-size:10px;color:#6c6b67">{{ s }}</div>
+            </sc-for>
+          </div>
+          <div style="padding:44px 22px 0">
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8f8e89;padding-bottom:12px">MATÉRIEL</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <sc-for list="{{ gear }}" as="g" hint-placeholder-count="4">
+                <a href="#" style="display:flex;flex-direction:column;gap:22px;padding:14px;border-radius:6px;background:#111110">
+                  <span style="font-family:'Geist Mono',monospace;font-size:10px;color:#77766f">{{ g.kind }}</span>
+                  <span style="font-size:14px">{{ g.name }} ↗</span>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:22px 22px 48px;font-size:11px;color:#5e5d59">Liens affiliés — merci de soutenir le carnet.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { a: 0, b: 0, c: 0, d: 2, e: 2 };
+  globeRef = React.createRef();
+  globeRefW = React.createRef();
+  globes = {};
+  componentDidMount() { this.dead = false; this.initGlobe('d', this.globeRef, 0.45, 14); this.initGlobe('e', this.globeRefW, 0.4, 0); }
+  componentDidUpdate() { if (this.dead) return; [['d', this.globeRef, 0.45, 14], ['e', this.globeRefW, 0.4, 0]].forEach(([k, r, s, y]) => { const G = this.globes[k]; if (G && G.cv && r.current && r.current !== G.cv) this.initGlobe(k, r, s, y); }); }
+  componentWillUnmount() { this.dead = true; Object.values(this.globes).forEach(g => { g.alive = false; cancelAnimationFrame(g.raf); }); this.globes = {}; }
+  async initGlobe(key, ref, k, dy0) {
+    await new Promise(r => { const t = () => (window.d3 && window.topojson) ? r() : setTimeout(t, 50); t(); });
+    this.landP = this.landP || fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json').then(r => r.json()).then(w => topojson.feature(w, w.objects.land));
+    this.land = await this.landP; this.grat = this.grat || d3.geoGraticule10();
+    const cv = ref.current; if (!cv || this.dead) return;
+    const old = this.globes[key]; if (old && old.cv === cv && old.alive) return; if (old) { old.alive = false; cancelAnimationFrame(old.raf); }
+    const G = this.globes[key] = { rot: old ? old.rot : [-14.4, -38, 0], cv, alive: true, touched: old && old.touched };
+    cv.style.transform = '';
+    const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d'); ctx.scale(dpr, dpr);
+    G.gp = d3.geoOrthographic().translate([W / 2, H / 2 + dy0]).scale(Math.min(W, H) * k).clipAngle(90).precision(0.4);
+    G.path = d3.geoPath(G.gp, ctx);
+    const local = e => { const r = cv.getBoundingClientRect(), s = cv.clientWidth / r.width; return [(e.clientX - r.left) * s, (e.clientY - r.top) * s]; };
+    cv.addEventListener('pointerdown', e => { G.drag = { p: local(e), r: [...G.rot], moved: false }; G.touched = true; G.anim = null; cv.setPointerCapture(e.pointerId); cv.style.cursor = 'grabbing'; });
+    cv.addEventListener('pointermove', e => {
+      const d = G.drag; if (!d) return; const p = local(e), dx = p[0] - d.p[0], dy = p[1] - d.p[1];
+      if (Math.abs(dx) + Math.abs(dy) > 4) d.moved = true;
+      G.rot = [d.r[0] + dx * 0.4, Math.max(-85, Math.min(85, d.r[1] - dy * 0.4)), 0];
+    });
+    cv.addEventListener('pointerup', e => {
+      const d = G.drag; G.drag = null; cv.style.cursor = 'grab'; if (!d || d.moved) return;
+      const [mx, my] = local(e); let best = -1, bd = 24;
+      this.trips.forEach((t, i) => { if (!this.visible(G, t)) return; const [x, y] = G.gp([t.lon, t.lat]); const dd = Math.hypot(x - mx, y - my); if (dd < bd) { bd = dd; best = i; } });
+      if (best >= 0) this.selectG(key, best);
+    });
+    const loop = now => {
+      if (!G.alive) return;
+      if (ref.current && ref.current !== cv) { G.alive = false; this.initGlobe(key, ref, k, dy0); return; }
+      try { this.tick(G, now); this.draw(G, key, ctx, W, H); } catch (err) { console.error(err); }
+      G.raf = requestAnimationFrame(loop);
+    };
+    this.draw(G, key, ctx, W, H);
+    G.raf = requestAnimationFrame(loop);
+  }
+  visible(G, t) { return d3.geoDistance([t.lon, t.lat], [-G.rot[0], -G.rot[1]]) < Math.PI / 2 - 0.05; }
+  selectG(key, i) {
+    this.setState({ [key]: i }); const G = this.globes[key]; if (!G) return; G.touched = true;
+    const t = this.trips[i], from = [...G.rot];
+    while (from[0] - -t.lon > 180) from[0] -= 360;
+    while (-t.lon - from[0] > 180) from[0] += 360;
+    G.anim = { t0: performance.now(), f: d3.interpolate(from, [-t.lon, -t.lat, 0]) };
+  }
+  tick(G, now) {
+    if (G.anim) { const p = Math.min(1, (now - G.anim.t0) / 1000); G.rot = G.anim.f(d3.easeCubicInOut(p)); if (p >= 1) G.anim = null; }
+    else if (!G.touched && !G.drag) G.rot = [G.rot[0] + 0.07, G.rot[1], 0];
+  }
+  draw(G, key, ctx, W, H) {
+    const gp = G.gp, path = G.path; gp.rotate(G.rot);
+    const r = gp.scale(), [cx, cy] = gp.translate();
+    ctx.clearRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(cx, cy, r * 0.95, cx, cy, r * 1.3);
+    g.addColorStop(0, 'rgba(255,255,255,0.08)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.beginPath(); path({ type: 'Sphere' }); ctx.fillStyle = '#0a0a09'; ctx.fill(); ctx.strokeStyle = '#2c2c2a'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); path(this.grat); ctx.strokeStyle = '#191918'; ctx.lineWidth = 0.6; ctx.stroke();
+    ctx.beginPath(); path(this.land); ctx.fillStyle = '#272725'; ctx.fill(); ctx.strokeStyle = '#3d3d3a'; ctx.lineWidth = 0.5; ctx.stroke();
+    ctx.beginPath(); path({ type: 'LineString', coordinates: this.trips.map(t => [t.lon, t.lat]) });
+    ctx.setLineDash([2, 3]); ctx.strokeStyle = '#6a6964'; ctx.lineWidth = 1; ctx.stroke(); ctx.setLineDash([]);
+    ctx.font = '500 ' + (key === 'e' ? 11 : 10) + 'px "Geist Mono", monospace';
+    this.trips.forEach((t, i) => {
+      if (!this.visible(G, t)) return;
+      const [x, y] = gp([t.lon, t.lat]), act = i === this.state[key];
+      if (act) { ctx.beginPath(); ctx.arc(x, y, 14, 0, 7); ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fill(); ctx.beginPath(); ctx.arc(x, y, 5.5, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); }
+      else { ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 7); ctx.fillStyle = '#bdbcb7'; ctx.fill(); }
+      ctx.fillStyle = act ? '#fff' : '#9a9994'; ctx.fillText(key === 'e' ? t.name.toUpperCase() : t.code, x + 9, y + 3.5);
+    });
+  }
+  trips = [
+    { name: 'Maroc', code: 'MAR', year: '2025', lat: 31.63, lon: -7.99, caption: "Marrakech à l'aube, le thé trop sucré, et l'Atlas qui dépasse derrière chaque toit." },
+    { name: 'Grèce', code: 'GRE', year: '2025', lat: 37.98, lon: 23.73, caption: "Athènes, puis les îles. Blanc partout, sauf la mer." },
+    { name: 'Prague', code: 'PRG', year: '2026', lat: 50.08, lon: 14.43, caption: "Brouillard sur la Vltava, ponts à six heures du matin, personne d'autre." },
+    { name: 'Ardèche', code: 'ARD', year: '2026', lat: 44.6, lon: 4.4, caption: "Canoë dans les gorges, nuits sous la tente. Le plus beau voyage était à côté." },
+    { name: 'Londres', code: 'LDN', year: '2026', lat: 51.5, lon: -0.13, caption: "Pluie fine, briques rouges, et trop de temps passé dans le métro." }
+  ];
+  gear = [
+    { name: 'Mon boîtier', kind: 'APPAREIL' },
+    { name: 'Objectif 35 mm', kind: 'OPTIQUE' },
+    { name: 'Sac à dos', kind: 'SAC' },
+    { name: 'Mes presets', kind: 'RETOUCHE' }
+  ];
+  proj(lat, lon) { return { x: (lon + 12) / 38 * 100, y: (56 - lat) / 28 * 100 }; }
+  build(key) {
+    return this.trips.map((t, i) => {
+      const p = this.proj(t.lat, t.lon);
+      const active = this.state[key] === i;
+      return { ...t, num: String(i + 1).padStart(2, '0'), x: p.x + '%', y: p.y + '%', active, inactive: !active, select: (key === 'd' || key === 'e') ? () => this.selectG(key, i) : () => this.setState({ [key]: i }) };
+    });
+  }
+  renderVals() {
+    const grid = [];
+    for (let lon = -10; lon <= 25; lon += 5) grid.push({ x: ((lon + 12) / 38 * 100) + '%', y: '0', w: '1px', h: '100%' });
+    for (let lat = 30; lat <= 55; lat += 5) grid.push({ x: '0', y: ((56 - lat) / 28 * 100) + '%', w: '100%', h: '1px' });
+    const c = this.trips[this.state.c];
+    const routePts = this.trips.map(t => { const p = this.proj(t.lat, t.lon); return p.x.toFixed(1) + ',' + p.y.toFixed(1); }).join(' ');
+    return {
+      grid, gear: this.gear, routePts,
+      tripsA: this.build('a'), tripsB: this.build('b'), tripsC: this.build('c'),
+      cur: { ...c, coords: c.lat.toFixed(2) + '°N  ' + Math.abs(c.lon).toFixed(2) + '°' + (c.lon < 0 ? 'O' : 'E') },
+      strip: [1, 2, 3, 4].map(n => 'photo ' + n + ' — ' + c.name),
+      globeRef: this.globeRef, globeRefW: this.globeRefW, tripsD: this.build('d'), tripsE: this.build('e'),
+      curE: { ...this.trips[this.state.e], coords: this.trips[this.state.e].lat.toFixed(2) + '°N  ' + Math.abs(this.trips[this.state.e].lon).toFixed(2) + '°' + (this.trips[this.state.e].lon < 0 ? 'O' : 'E') },
+      stripE: [1, 2, 3, 4].map(n => 'photo ' + n + ' — ' + this.trips[this.state.e].name),
+      curD: { ...this.trips[this.state.d], coords: this.trips[this.state.d].lat.toFixed(2) + '°N  ' + Math.abs(this.trips[this.state.d].lon).toFixed(2) + '°' + (this.trips[this.state.d].lon < 0 ? 'O' : 'E') },
+      stripD: [1, 2, 3, 4].map(n => 'photo ' + n + ' — ' + this.trips[this.state.d].name)
+    };
+  }
+}
+</script>
+</body>
+</html>

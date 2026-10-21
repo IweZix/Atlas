@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import Gear from '../components/Gear.astro';
+import Globe from '../components/Globe.astro';
+import Lightbox from '../components/Lightbox.astro';
+import TripNav from '../components/TripNav.astro';
+import TripPanel from '../components/TripPanel.astro';
+import gear from '../data/gear.json';
+import Base from '../layouts/Base.astro';
+import { formatCoords } from '../lib/coords';
+
+// Du plus récent au plus ancien : le premier de la liste est le voyage affiché par défaut.
+const entries = (await getCollection('trips')).sort((a, b) => b.data.order - a.data.order);
+const trips = entries.map(({ id, data }) => ({
+  slug: id,
+  name: data.name,
+  code: data.code,
+  year: data.year,
+  lat: data.lat,
+  lon: data.lon,
+  caption: data.caption,
+  photos: data.photos,
+  coords: formatCoords(data.lat, data.lon),
+}));
+
+const active = trips[0];
+const years = `${trips[trips.length - 1].year} — ${active.year}`;
+const globeData = trips.map(({ slug, name, code, lat, lon, coords }) => ({
+  slug,
+  name,
+  code,
+  lat,
+  lon,
+  coords,
+}));
+---
+
+<Base
+  title="luca_ncl — Carnet de route"
+  description="Carnet de voyage photo de @luca_ncl : un globe, cinq voyages, 2025 — 2026."
+>
+  <main class="shell">
+    <Globe years={years} coords={active.coords} instagramUrl="https://instagram.com/luca_ncl" />
+    <div class="side">
+      <div class="side-top">
+        <a class="insta mono" href="https://instagram.com/luca_ncl" rel="noopener">INSTAGRAM ↗</a>
+      </div>
+      <TripNav trips={trips} active={active.slug} />
+      {trips.map((t) => <TripPanel {...t} hidden={t.slug !== active.slug} />)}
+      <Gear items={gear} />
+    </div>
+  </main>
+  <Lightbox />
+  <script type="application/json" id="trips-data" set:html={JSON.stringify(globeData)} />
+  <script is:inline>
+    // Applique ?v=slug avant le premier rendu pour éviter un flash du voyage par défaut.
+    (() => {
+      const v = new URLSearchParams(location.search).get('v');
+      if (!v || !document.querySelector(`.trip[data-slug="${CSS.escape(v)}"]`)) return;
+      for (const el of document.querySelectorAll('.trip')) el.hidden = el.dataset.slug !== v;
+      for (const el of document.querySelectorAll('.trip-btn'))
+        el.setAttribute('aria-pressed', String(el.dataset.slug === v));
+    })();
+  </script>
+  <script>
+    import '../scripts/trips';
+  </script>
+</Base>
+
+<style>
+  .side-top {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 460px;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    .side {
+      min-height: 0;
+      overflow-y: auto;
+      border-left: 1px solid var(--line);
+    }
+
+    .side-top {
+      display: flex;
+      justify-content: flex-end;
+      padding: 36px var(--gutter) 0;
+    }
+
+    .insta {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--text-chip);
+    }
+  }
+</style>

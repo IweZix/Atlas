@@ -7,7 +7,16 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!dist",
+      "!.astro",
+      "!.vercel",
+      "!docs",
+      "!public/data",
+      "!**/*.astro"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -21,10 +30,6 @@
       "style": {
         "useImportType": "off"
       }
-    },
-    "domains": {
-      "next": "recommended",
-      "react": "recommended"
     }
   },
   "javascript": {
