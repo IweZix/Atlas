@@ -25,7 +25,7 @@ Site perso statique **Astro** (TypeScript strict, Node >= 22.12) : un globe 3D (
 
 - `src/content.config.ts` — collection `trips` (loader `glob` sur `src/content/trips/*.md`). Un fichier par voyage, frontmatter : `name`, `code` (3 lettres, libellé du globe mobile), `year`, `order` (ordre chronologique, aussi utilisé pour le tracé pointillé), `lat`, `lon`, `caption`, `cover`, `photos` (images relatives, traitées par `astro:assets`).
 - Les photos de `src/content/trips/<slug>/` sont des **placeholders** générés par `scripts/gen-placeholders.mjs` ; les remplacer par les vraies photos (JPEG, 2000px max) sans changer le code.
-- `src/data/gear.json` — matériel affilié `{ name, kind, url }` (URLs encore à `#`). Liens rendus avec `rel="sponsored noopener"`.
+- `src/data/gear.json` — matériel affiché `{ name, kind }` (simples cartes, pas de liens).
 - `public/data/land-110m.json` — carte du monde (copie de `world-atlas@2`), servie localement.
 
 ### Page

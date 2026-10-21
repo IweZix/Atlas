@@ -1,6 +1,6 @@
 # Carnet de voyage — @luca_ncl
 
-Site perso de photos de voyage : un globe 3D à faire tourner, chaque point est un voyage (album, légende, année), et en bas le matériel photo en liens affiliés. Astro statique, déployé sur Vercel.
+Site perso de photos de voyage : un globe 3D à faire tourner, chaque point est un voyage (album, légende, année), et en bas le matériel photo. Astro statique, déployé sur Vercel.
 
 ## Lancer
 
@@ -33,7 +33,7 @@ Node >= 22.12 requis.
 2. Déposer les photos dans `src/content/trips/<slug>/` (4 à 8, JPEG, 2000px de large max).
 3. Un lien direct vers un voyage : `/?v=<slug>`.
 
-Les photos actuelles sont des placeholders (`npm run generate-placeholders`). Les liens du matériel sont dans `src/data/gear.json`.
+Les photos actuelles sont des placeholders (`npm run generate-placeholders`). Le matériel affiché en bas de page est dans `src/data/gear.json` (simples cartes, sans lien).
 
 ## Déployer
 

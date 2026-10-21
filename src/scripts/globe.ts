@@ -11,6 +11,10 @@ export type GlobeTrip = {
   lon: number;
 };
 type Rotation = [number, number, number];
+type Box = { x: number; y: number; w: number; h: number };
+
+const overlaps = (a: Box, b: Box) =>
+  a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
 
 export interface GlobeOptions {
   canvas: HTMLCanvasElement;
@@ -167,29 +171,64 @@ export async function createGlobe(opts: GlobeOptions): Promise<Globe> {
     ctx.setLineDash([]);
 
     ctx.font = `500 ${l.font}px "Geist Mono Variable", ui-monospace, monospace`;
+    const points: { i: number; x: number; y: number }[] = [];
     trips.forEach((t, i) => {
       if (!isVisible(t)) return;
       const p = projection([t.lon, t.lat]);
-      if (!p) return;
-      const [x, y] = p;
-      const isActive = i === active;
-      if (isActive) {
-        ctx.beginPath();
+      if (p) points.push({ i, x: p[0], y: p[1] });
+    });
+
+    for (const { i, x, y } of points) {
+      ctx.beginPath();
+      if (i === active) {
         ctx.arc(x, y, 14, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,.12)';
         ctx.fill();
         ctx.beginPath();
         ctx.arc(x, y, 5.5, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
-        ctx.fill();
       } else {
-        ctx.beginPath();
         ctx.arc(x, y, 3.5, 0, Math.PI * 2);
         ctx.fillStyle = '#bdbcb7';
-        ctx.fill();
       }
-      ctx.fillStyle = isActive ? '#fff' : '#9a9994';
-      ctx.fillText(l.label(t), x + 9, y + 3.5);
+      ctx.fill();
+    }
+
+    // Libellés : le voyage actif d'abord, puis les autres. Chaque libellé essaie
+    // droite, gauche, dessus, dessous et est masqué si tout est occupé (le zoom les révèle).
+    ctx.textBaseline = 'alphabetic';
+    const boxes: Box[] = points.map(({ x, y, i }) => {
+      const r = i === active ? 14 : 5;
+      return { x: x - r, y: y - r, w: 2 * r, h: 2 * r };
+    });
+    const h = l.font + 2;
+    const byPriority = [...points].sort(
+      (a, b) => Number(b.i === active) - Number(a.i === active) || a.i - b.i,
+    );
+    byPriority.forEach(({ i, x, y }) => {
+      const text = l.label(trips[i]);
+      const w = ctx.measureText(text).width;
+      const own = boxes[points.findIndex((p) => p.i === i)];
+      const candidates: [number, number][] = [
+        [x + 9, y + 3.5],
+        [x - 9 - w, y + 3.5],
+        [x - w / 2, y - 11],
+        [x - w / 2, y + 19],
+        [x + 9, y - 9],
+        [x - 9 - w, y - 9],
+        [x + 9, y + 17],
+        [x - 9 - w, y + 17],
+      ];
+      const spot = candidates.find(([tx, ty]) => {
+        const box = { x: tx - 1, y: ty - l.font + 1, w: w + 2, h };
+        return !boxes.some((b) => b !== own && overlaps(b, box));
+      });
+      // Le voyage actif garde toujours son libellé, même si l'espace est occupé.
+      const place = spot ?? (i === active ? candidates[0] : null);
+      if (!place) return;
+      boxes.push({ x: place[0] - 1, y: place[1] - l.font + 1, w: w + 2, h });
+      ctx.fillStyle = i === active ? '#fff' : '#9a9994';
+      ctx.fillText(text, place[0], place[1]);
     });
   }
 
