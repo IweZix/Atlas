@@ -8,19 +8,30 @@ interface Props {
   year: number;
   caption: string;
   photos: ImageMetadata[];
+  upcoming: boolean;
+  coords: string;
   hidden: boolean;
 }
 
-const { slug, name, year, caption, photos, hidden } = Astro.props;
+const { slug, name, year, caption, photos, upcoming, coords, hidden } = Astro.props;
 ---
 
 <article class="trip" data-slug={slug} hidden={hidden}>
   <header>
     <h2>{name}</h2>
-    <span class="year mono">{year}</span>
+    <span class="year mono">{upcoming ? `${year} · BIENTÔT` : year}</span>
   </header>
   <p class="caption">{caption}</p>
-  <Photos photos={photos} tripName={name} />
+  {
+    upcoming ? (
+      <div class="soon">
+        <span class="soon-label mono">PROCHAINE DESTINATION</span>
+        <span class="soon-coords mono">{coords}</span>
+      </div>
+    ) : (
+      <Photos photos={photos} tripName={name} />
+    )
+  }
 </article>
 
 <style>
@@ -50,6 +61,34 @@ const { slug, name, year, caption, photos, hidden } = Astro.props;
     line-height: 1.45;
     color: var(--text-secondary);
     text-wrap: pretty;
+  }
+
+  .soon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 80px;
+    min-height: 220px;
+    margin: 0 var(--gutter);
+    padding: 16px;
+    border: 1px dashed var(--chip-border);
+    border-radius: var(--radius-photo);
+    background: repeating-linear-gradient(
+      135deg,
+      transparent 0 8px,
+      rgba(255, 255, 255, 0.015) 8px 16px
+    );
+  }
+
+  .soon-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .soon-coords {
+    font-size: 10px;
+    color: var(--text-faint);
   }
 
   @media (min-width: 900px) {

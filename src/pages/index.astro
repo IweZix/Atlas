@@ -20,24 +20,28 @@ const trips = entries.map(({ id, data }) => ({
   lon: data.lon,
   caption: data.caption,
   photos: data.photos,
+  upcoming: data.upcoming,
   coords: formatCoords(data.lat, data.lon),
 }));
 
-const active = trips[0];
-const years = `${trips[trips.length - 1].year} — ${active.year}`;
-const globeData = trips.map(({ slug, name, code, lat, lon, coords }) => ({
+// Le voyage affiché par défaut est le plus récent déjà réalisé, pas la destination à venir.
+const active = trips.find((t) => !t.upcoming) ?? trips[0];
+const past = trips.filter((t) => !t.upcoming);
+const years = `${trips[trips.length - 1].year} — ${trips[0].year}`;
+const globeData = trips.map(({ slug, name, code, lat, lon, coords, upcoming }) => ({
   slug,
   name,
   code,
   lat,
   lon,
   coords,
+  upcoming,
 }));
 ---
 
 <Base
   title="luca_ncl — Carnet de route"
-  description="Carnet de voyage photo de @luca_ncl : un globe, cinq voyages, 2025 — 2026."
+  description={`Carnet de voyage photo de @luca_ncl : un globe, ${past.length} voyages, ${years}.`}
 >
   <main class="shell">
     <Globe years={years} coords={active.coords} instagramUrl="https://instagram.com/luca_ncl" />

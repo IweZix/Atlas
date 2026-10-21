@@ -10,6 +10,8 @@ const trips = defineCollection({
       code: z.string().length(3),
       year: z.number().int(),
       order: z.number().int(),
+      // Destination à venir : pas de photos, affichée avec le badge « Bientôt ».
+      upcoming: z.boolean().default(false),
       lat: z.number().min(-90).max(90),
       lon: z.number().min(-180).max(180),
       caption: z.string(),

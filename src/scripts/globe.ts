@@ -5,6 +5,7 @@ import { feature } from 'topojson-client';
 import type { Topology } from 'topojson-specification';
 
 export type GlobeTrip = {
+  upcoming?: boolean;
   name: string;
   code: string;
   lat: number;
@@ -163,11 +164,28 @@ export async function createGlobe(opts: GlobeOptions): Promise<Globe> {
     ctx.stroke();
 
     ctx.beginPath();
-    path({ type: 'LineString', coordinates: trips.map((t) => [t.lon, t.lat]) });
+    const done = trips.filter((t) => !t.upcoming);
+    path({ type: 'LineString', coordinates: done.map((t) => [t.lon, t.lat]) });
     ctx.setLineDash([2, 3]);
     ctx.strokeStyle = '#6a6964';
     ctx.lineWidth = 1;
     ctx.stroke();
+
+    // Trajet vers une destination à venir : plus clairsemé et plus discret.
+    const from = done[0];
+    for (const t of trips.filter((t) => t.upcoming && from)) {
+      ctx.beginPath();
+      path({
+        type: 'LineString',
+        coordinates: [
+          [from.lon, from.lat],
+          [t.lon, t.lat],
+        ],
+      });
+      ctx.setLineDash([1, 5]);
+      ctx.strokeStyle = '#4a4944';
+      ctx.stroke();
+    }
     ctx.setLineDash([]);
 
     ctx.font = `500 ${l.font}px "Geist Mono Variable", ui-monospace, monospace`;
@@ -179,8 +197,35 @@ export async function createGlobe(opts: GlobeOptions): Promise<Globe> {
     });
 
     for (const { i, x, y } of points) {
+      const isActive = i === active;
+      if (trips[i].upcoming) {
+        // Destination à venir : anneau creux, avec une onde lente si les animations sont permises.
+        const color = isActive ? '#fff' : '#bdbcb7';
+        if (isActive) {
+          ctx.beginPath();
+          ctx.arc(x, y, 14, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,.12)';
+          ctx.fill();
+        }
+        if (!reducedMotion.matches) {
+          const p = (performance.now() % 2400) / 2400;
+          ctx.beginPath();
+          ctx.arc(x, y, 5 + p * 11, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(255,255,255,${(0.35 * (1 - p)).toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.arc(x, y, isActive ? 5 : 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        continue;
+      }
       ctx.beginPath();
-      if (i === active) {
+      if (isActive) {
         ctx.arc(x, y, 14, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,.12)';
         ctx.fill();

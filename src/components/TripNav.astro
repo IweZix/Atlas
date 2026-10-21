@@ -1,6 +1,6 @@
 ---
 interface Props {
-  trips: { slug: string; name: string; year: number }[];
+  trips: { slug: string; name: string; year: number; upcoming: boolean }[];
   active: string;
 }
 
@@ -14,11 +14,13 @@ const { trips, active } = Astro.props;
         type="button"
         class="trip-btn"
         data-slug={t.slug}
+        data-upcoming={t.upcoming ? '' : undefined}
         aria-pressed={t.slug === active ? 'true' : 'false'}
       >
         <span class="num mono">{String(trips.length - i).padStart(2, '0')}</span>
         <span class="name">{t.name}</span>
-        <span class="year mono">{t.year}</span>
+        {t.upcoming && <span class="soon-chip mono">BIENTÔT</span>}
+        <span class="year mono">{t.upcoming ? 'BIENTÔT' : t.year}</span>
       </button>
     ))
   }
@@ -47,12 +49,35 @@ const { trips, active } = Astro.props;
     color: var(--bg);
   }
 
+  .trip-btn[data-upcoming] {
+    border-style: dashed;
+  }
+
+  .soon-chip {
+    margin-left: 8px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+  }
+
+  .trip-btn[aria-pressed='true'] .soon-chip {
+    color: var(--text-faint);
+  }
+
   .num,
   .year {
     display: none;
   }
 
   @media (min-width: 900px) {
+    .soon-chip {
+      display: none;
+    }
+
+    .trip-btn[data-upcoming] {
+      border-style: solid;
+    }
+
     .nav {
       flex-direction: column;
       gap: 0;
