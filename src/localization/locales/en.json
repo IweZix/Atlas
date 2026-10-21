@@ -1,0 +1,342 @@
+{
+  "common": {
+    "errors": {
+      "required": "This field is required"
+    },
+    "back": "Back"
+  },
+  "navbar": {
+    "home": "Home"
+  },
+  "homepage": {
+    "title": "This is the homepage"
+  },
+  "login": {
+    "title": "Log in",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "submit": "Log in",
+    "emailInvalid": "Invalid email",
+    "invalidCredentials": "Incorrect email or password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {email}",
+    "role": "Role: {role}",
+    "noRole": "No role assigned",
+    "logout": "Log out"
+  },
+  "sidebar": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "analytics": "Analytics",
+      "annonces": "Announcements",
+      "journal": "Journal",
+      "settings": "Settings"
+    },
+    "comingSoon": "Coming soon",
+    "featureLocked": "Locked",
+    "menu": "Menu",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu"
+  },
+  "users": {
+    "title": "Users",
+    "accessDenied": "Access restricted to administrators",
+    "addButton": "Add a user",
+    "loadError": "Couldn't load users",
+    "searchPlaceholder": "Search by email or name...",
+    "sort": {
+      "label": "Sort by",
+      "default": "Default",
+      "ascending": "Ascending order",
+      "descending": "Descending order"
+    },
+    "empty": {
+      "createButton": "Create a user",
+      "noResults": "No users match this search."
+    },
+    "columns": {
+      "email": "Email",
+      "name": "Name",
+      "role": "Role",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "create": {
+      "title": "Add a user",
+      "submit": "Create user",
+      "successTitle": "User created",
+      "temporaryPasswordLabel": "Temporary password",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "viewUser": "View profile",
+      "createError": "Couldn't create this user (email already in use?)"
+    },
+    "detail": {
+      "header": "User — {email}",
+      "identityTitle": "Identity",
+      "roleTitle": "Role & permissions",
+      "firstNameLabel": "First name",
+      "lastNameLabel": "Last name",
+      "emailLabel": "Email",
+      "notProvided": "Not provided",
+      "createdAt": "Account created on {date}",
+      "lastSignIn": "Last signed in on {date}",
+      "neverSignedIn": "Never signed in",
+      "active": "Active account",
+      "inactive": "Deactivated account",
+      "loadError": "Couldn't load this user",
+      "roles": {
+        "admin": {
+          "label": "Admin",
+          "description": "Full access: dashboard and user management."
+        },
+        "manager": {
+          "label": "Manager",
+          "description": "Dashboard access only."
+        },
+        "user": {
+          "label": "User",
+          "description": "No access to admin sections."
+        }
+      },
+      "save": "Save changes",
+      "saveSuccess": "Changes saved",
+      "saveError": "Something went wrong, try again",
+      "cannotChangeOwnRole": "You can't change your own role",
+      "resetPassword": "Reset password",
+      "resetPasswordSuccess": "Reset email sent",
+      "resetPasswordError": "Couldn't send the reset email",
+      "deactivate": "Deactivate account",
+      "reactivate": "Reactivate account",
+      "deactivateConfirm": "Deactivate this account? It won't be able to log in until reactivated.",
+      "statusSuccess": "Account status updated",
+      "statusError": "Couldn't update the account status",
+      "cannotDeactivateOwnAccount": "You can't deactivate your own account",
+      "delete": "Delete account",
+      "deleteConfirmTitle": "Delete this account?",
+      "deleteConfirmDescription": "This is permanent and cannot be undone. To confirm, retype the account's email address:",
+      "deleteConfirmPlaceholder": "Email address",
+      "deleteConfirmButton": "Delete permanently",
+      "deleteCancel": "Cancel",
+      "deleteSuccess": "Account deleted",
+      "deleteError": "Couldn't delete this account",
+      "cannotDeleteOwnAccount": "You can't delete your own account",
+      "editButton": "Edit",
+      "editTitle": "Edit user",
+      "tabs": {
+        "info": "Info",
+        "history": "History",
+        "logs": "Logs"
+      }
+    }
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "newPasswordLabel": "New password",
+    "submit": "Submit",
+    "invalidLink": "This link is invalid or has expired",
+    "success": "Password updated, you can log back in",
+    "error": "Something went wrong, try again"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {lastPage}"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "label": "Interface language",
+      "description": "Choose the language used in the backoffice.",
+      "options": {
+        "fr": "Français",
+        "en": "English"
+      }
+    },
+    "theme": {
+      "label": "Theme",
+      "description": "Choose the backoffice's appearance.",
+      "options": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
+    },
+    "updateError": "Couldn't save your preferences. Please try again."
+  },
+  "analytics": {
+    "title": "Analytics",
+    "periodSelector": {
+      "days7": "7 days",
+      "days30": "30 days",
+      "days90": "90 days"
+    },
+    "comparedToPreviousPeriod": "vs the previous {days} days",
+    "stats": {
+      "visitors": "Visitors",
+      "pageviews": "Pageviews"
+    },
+    "chart": {
+      "title": "Daily trend"
+    },
+    "panels": {
+      "pages": "Top pages",
+      "referrers": "Traffic sources",
+      "countries": "Countries",
+      "devices": "Devices",
+      "os": "Operating systems"
+    },
+    "direct": "Direct",
+    "loadError": "Unable to load this data right now.",
+    "noData": "No data for this period."
+  },
+  "upgrade": {
+    "title": "Feature not available",
+    "body": "This feature isn't included in your current plan. Contact us to unlock it.",
+    "contactButton": "Contact us",
+    "features": {
+      "analytics": {
+        "body": "Analytics is reserved for subscribed clients. Contact us to unlock this feature."
+      },
+      "banner": {
+        "body": "The announcement banner isn't included in your current plan. Contact us to unlock it."
+      }
+    }
+  },
+  "announcements": {
+    "title": "Announcements",
+    "accessDenied": "Access restricted to administrators",
+    "loadError": "Couldn't load announcements",
+    "addButton": "New announcement",
+    "emptyTitle": "No announcements",
+    "emptyDescription": "Create your first announcement to show it on the site.",
+    "columns": {
+      "message": "Message",
+      "period": "Period",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "live": "Live",
+      "scheduled": "Scheduled",
+      "expired": "Expired",
+      "disabled": "Disabled",
+      "pending": "Pending"
+    },
+    "period": {
+      "unlimited": "No limit",
+      "from": "From {date}",
+      "until": "Until {date}",
+      "range": "{start} to {end}"
+    },
+    "form": {
+      "createTitle": "New announcement",
+      "editTitle": "Edit announcement",
+      "messageLabel": "Message",
+      "messageCounter": "{count} / 160",
+      "linkUrlLabel": "Link (URL)",
+      "linkLabelLabel": "Link label",
+      "variantLabel": "Style",
+      "variant": {
+        "info": "Info",
+        "promo": "Promo",
+        "alerte": "Alert"
+      },
+      "startsAtLabel": "Start date",
+      "endsAtLabel": "End date",
+      "dateHelp": "The banner shows from the start of the first day through the end of the last day.",
+      "isActiveLabel": "Show on the site",
+      "previewTitle": "Preview",
+      "submitCreate": "Create announcement",
+      "submitEdit": "Save changes",
+      "createSuccess": "Announcement created",
+      "saveSuccess": "Changes saved",
+      "errors": {
+        "forbidden": "Action not allowed",
+        "feature_disabled": "This feature is disabled",
+        "message_required": "The message is required",
+        "message_too_long": "The message is over 160 characters",
+        "link_url_invalid": "Invalid link (use https:// or an internal path starting with /)",
+        "link_pair_required": "The link URL and label go together",
+        "link_label_length": "The label must be between 1 and 40 characters",
+        "end_before_start": "The end date must be after the start date",
+        "unexpected_error": "Something went wrong, try again"
+      }
+    },
+    "toggleOn": "Enable",
+    "toggleOff": "Disable",
+    "deleteConfirmTitle": "Delete this announcement?",
+    "deleteConfirmDescription": "This is permanent and cannot be undone.",
+    "deleteConfirmButton": "Delete",
+    "deleteCancel": "Cancel",
+    "deleteSuccess": "Announcement deleted",
+    "deleteError": "Couldn't delete this announcement",
+    "toggleError": "Couldn't update this announcement",
+    "public": {
+      "ariaLabel": "Announcement",
+      "dismissAriaLabel": "Close announcement"
+    },
+    "detail": {
+      "loadError": "Couldn't load this announcement",
+      "tabs": {
+        "edit": "Edit",
+        "history": "History"
+      }
+    }
+  },
+  "journal": {
+    "title": "Audit log",
+    "accessDenied": "Access restricted to administrators",
+    "loadError": "Couldn't load the journal",
+    "empty": "No actions recorded for your filters.",
+    "system": "System",
+    "columns": {
+      "date": "Date",
+      "user": "User",
+      "action": "Action",
+      "type": "Type",
+      "element": "Element",
+      "details": "Details"
+    },
+    "actions": {
+      "insert": "Created",
+      "update": "Updated",
+      "delete": "Deleted",
+      "restore": "Restored"
+    },
+    "filters": {
+      "user": "User",
+      "allUsers": "All users",
+      "system": "System",
+      "type": "Type",
+      "allTypes": "All types",
+      "action": "Action",
+      "allActions": "All actions",
+      "from": "From",
+      "to": "To",
+      "reset": "Reset"
+    },
+    "models": {
+      "announcements": "Announcement",
+      "users": "User"
+    },
+    "diff": {
+      "seeMore": "See more",
+      "seeLess": "See less",
+      "createdValues": "Created values",
+      "deletedValues": "Values at deletion time"
+    },
+    "detailsPanel": {
+      "title": "Details",
+      "close": "Close"
+    },
+    "history": {
+      "empty": "No changes recorded",
+      "loadError": "Couldn't load the history"
+    }
+  }
+}
